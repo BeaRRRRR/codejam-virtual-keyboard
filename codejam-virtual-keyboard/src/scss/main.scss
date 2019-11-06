@@ -1,0 +1,116 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font: 71%/1.5 Verdana, Sans-Serif;
+  background: #eee;
+}
+
+#container {
+  margin: 100px auto;
+  width: 80%;
+
+  #textarea {
+    width: 100%;
+    background: #fff;
+    outline: none;
+    resize: none;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+  }
+
+  #keyboard {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 1fr);
+    grid-row-gap: 10px;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding: 0;
+    font-size: large;
+
+    @media (min-width: 1400px) {
+      margin-right: 15%;
+      margin-left: 15%;
+    }
+
+    @media (max-width: 1000px) {
+      margin-right: 1%;
+      margin-left: 1%;
+    }
+
+    .first-row {
+      display: grid;
+      grid-template-rows: 1fr;
+      grid-template-columns: repeat(13, 1fr) 2fr;
+      grid-gap: 1%;
+
+    }
+
+    .second-row {
+      display: grid;
+      grid-template-rows: 40px;
+      grid-template-columns: 1.5fr repeat(14, 1fr);
+      grid-gap: 1%;
+    }
+
+    .third-row {
+      display: grid;
+      grid-template-rows: 40px;
+      grid-template-columns: 1.75fr repeat(11, 1fr) 2.25fr;
+      grid-gap: 1%;
+    }
+
+    .fourth-row {
+      display: grid;
+      grid-template-rows: 40px;
+      grid-template-columns: 2.25fr repeat(11, 1fr) 1.75fr;
+      grid-gap: 1%;
+    }
+
+
+    .fifth-row {
+      display: grid;
+      grid-template-rows: 40px;
+      grid-template-columns: repeat(3, 1.25fr) 6.25fr repeat(5, 1fr);
+      grid-gap: 1%;
+    }
+
+    * > div {
+      //color: #9eb57b;
+      //background: #2b3743;
+      text-align: center;
+      //for aligning text vertically
+      line-height: 40px;
+      background: #fff;
+      border: 1px solid #f9f9f9;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &.pressed {
+        border-radius: 50%;
+        background-color: aqua !important;
+      }
+
+      .on {
+        display: none;
+      }
+
+      .on-ru {
+        display: none;
+      }
+    }
+
+  }
+
+  .changeLang {
+    font-size: 2em;
+    text-align: center;
+    margin: 20px auto;
+  }
+}
+
+
