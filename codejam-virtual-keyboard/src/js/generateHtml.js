@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 document.getElementById('container').innerHTML = `
     <textarea id="textarea" rows="9" lang="ru" contenteditable></textarea>
     <div id="keyboard">

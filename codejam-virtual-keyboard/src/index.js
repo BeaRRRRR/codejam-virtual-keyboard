@@ -42,7 +42,6 @@ if (localStorage.getItem('lang') === 'ru') {
 }
 
 document.addEventListener('keydown', async (event) => {
-  console.log(event);
   if (event.location !== 0) {
     if (event.key === 'Meta') {
       document.getElementById('leftShift').classList.add('pressed');
@@ -89,7 +88,6 @@ document.addEventListener('keydown', async (event) => {
         if (localStorage.getItem('lang') === 'ru') {
           // There might be different symbols when pressing shift in russian or english layout
           if (sym.lastElementChild.classList && sym.lastElementChild.classList.contains('on-ru')) {
-            console.log(sym);
             sym.firstElementChild.classList.remove('off');
             sym.firstElementChild.classList.add('on');
 
@@ -124,7 +122,6 @@ document.addEventListener('keydown', async (event) => {
           : elem.textContent.toUpperCase();
       });
     }
-    console.log(event.key.charCodeAt(0));
     // If inputted symbol is russian
     if (event.key.charCodeAt(0) >= 128) {
       const element = document.getElementById(en[event.key] || en[event.key.toLowerCase()]);
@@ -236,7 +233,6 @@ document.addEventListener('keyup', async (event) => {
     const element = document.getElementById(event.key.charCodeAt(0) > 128
       ? en[event.key.toLowerCase()]
       : event.key.toLowerCase());
-    console.log(element);
     if (element.parentElement) {
       element.parentElement.classList.remove('pressed');
     }
