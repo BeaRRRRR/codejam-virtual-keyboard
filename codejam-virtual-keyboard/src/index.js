@@ -1,5 +1,6 @@
 import './scss/main.scss';
 import ru from './data/ru.json';
+import './js/generateHtml';
 
 
 const textArea = document.getElementById('textarea');
@@ -98,8 +99,8 @@ document.addEventListener('keydown', async (event) => {
             sym.firstChild.innerHTML = sym.firstChild.textContent.toUpperCase();
           }
         } else {
-          sym.firstChild.classList.remove('off');
-          sym.firstChild.classList.add('on');
+          sym.firstElementChild.classList.remove('off');
+          sym.firstElementChild.classList.add('on');
 
           const secondChild = sym.getElementsByClassName('on')[1];
           secondChild.classList.remove('on');
@@ -201,13 +202,13 @@ document.addEventListener('keyup', async (event) => {
       const symbols = document.getElementsByClassName('symbol');
       [].forEach.call(symbols, (symbol) => {
         const sym = symbol;
-        sym.firstChild.classList.remove('on');
-        sym.firstChild.classList.add('off');
+        sym.firstElementChild.classList.remove('on');
+        sym.firstElementChild.classList.add('off');
 
         if (localStorage.getItem('lang') === 'ru') {
-          if (sym.lastChild.classList && sym.lastChild.classList.contains('off-ru')) {
-            sym.lastChild.classList.remove('off-ru');
-            sym.lastChild.classList.add('on-ru');
+          if (sym.lastElementChild.classList && sym.lastElementChild.classList.contains('off-ru')) {
+            sym.lastElementChild.classList.remove('off-ru');
+            sym.lastElementChild.classList.add('on-ru');
           } else {
             sym.firstChild.innerHTML = sym.firstChild.textContent.toLowerCase();
           }
