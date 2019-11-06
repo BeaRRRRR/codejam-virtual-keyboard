@@ -20,9 +20,10 @@ function swap(json) {
   return ret;
 }
 
+// Mapping each english symbol to russian
 const en = swap(ru);
-console.log(en);
 
+// Set language of the keyboard based on the one stored in localStorage, if there is one
 localStorage.setItem('lang', localStorage.getItem('lang') || 'ru');
 if (localStorage.getItem('lang') === 'ru') {
   const letters = document.getElementsByClassName('letter');
@@ -43,22 +44,15 @@ document.addEventListener('keydown', async (event) => {
   console.log(event);
   if (event.location !== 0) {
     if (event.key === 'Meta') {
-      document.getElementById('leftShift')
-        .classList
-        .add('pressed');
-      document.getElementById('leftAlt')
-        .classList
-        .add('pressed');
+      document.getElementById('leftShift').classList.add('pressed');
+      document.getElementById('leftAlt').classList.add('pressed');
       await sleep(300);
-      document.getElementById('leftShift')
-        .classList
-        .remove('pressed');
-      document.getElementById('leftAlt')
-        .classList
-        .remove('pressed');
+      document.getElementById('leftShift').classList.remove('pressed');
+      document.getElementById('leftAlt').classList.remove('pressed');
       const letters = document.getElementsByClassName('letter');
       const symbols = document.getElementsByClassName('symbol');
       const lang = localStorage.getItem('lang');
+      // Switching the language of each letter
       [].forEach.call(letters, (element) => {
         const elem = element;
         if (lang === 'en') {
@@ -69,6 +63,7 @@ document.addEventListener('keydown', async (event) => {
           elem.innerHTML = en[elem.textContent];
         }
       });
+      // Switching the language of each symbol
       [].forEach.call(symbols, (symbol) => {
         const elem = symbol.firstChild;
         if (lang === 'en') {
@@ -82,6 +77,7 @@ document.addEventListener('keydown', async (event) => {
       localStorage.setItem('lang', lang === 'ru' ? 'en' : 'ru');
     } else if (event.key === 'Shift') {
       const letters = document.getElementsByClassName('letter');
+      // Making each letter uppercase
       [].forEach.call(letters, (element) => {
         const elem = element;
         elem.innerHTML = elem.textContent.toUpperCase();
@@ -90,12 +86,14 @@ document.addEventListener('keydown', async (event) => {
       [].forEach.call(symbols, (symbol) => {
         const sym = symbol;
         if (localStorage.getItem('lang') === 'ru') {
-          if (sym.lastChild.classList && sym.lastChild.classList.contains('on-ru')) {
-            sym.firstChild.classList.remove('off');
-            sym.firstChild.classList.add('on');
+          // There might be different symbols when pressing shift in russian or english layout
+          if (sym.lastElementChild.classList && sym.lastElementChild.classList.contains('on-ru')) {
+            console.log(sym);
+            sym.firstElementChild.classList.remove('off');
+            sym.firstElementChild.classList.add('on');
 
-            sym.lastChild.classList.remove('on-ru');
-            sym.lastChild.classList.add('off-ru');
+            sym.lastElementChild.classList.remove('on-ru');
+            sym.lastElementChild.classList.add('off-ru');
           } else {
             sym.firstChild.innerHTML = sym.firstChild.textContent.toUpperCase();
           }
@@ -109,6 +107,7 @@ document.addEventListener('keydown', async (event) => {
         }
       });
     } else {
+      // Just adding animation to a key based on its location
       document.getElementById(`${event.location === 1 ? 'left' : 'right'}${event.key}`)
         .classList
         .add('pressed');
@@ -125,45 +124,29 @@ document.addEventListener('keydown', async (event) => {
       });
     }
     console.log(event.key.charCodeAt(0));
+    // If inputted symbol is russian
     if (event.key.charCodeAt(0) >= 128) {
       const element = document.getElementById(en[event.key] || en[event.key.toLowerCase()]);
-      console.log(en[event.key]);
       if (element.parentElement) {
-        element
-          .parentElement
-          .classList
-          .add('pressed');
+        element.parentElement.classList.add('pressed');
       }
-      element
-        .classList
-        .add('pressed');
+      element.classList.add('pressed');
+      element.classList.add('pressed');
+    } else if (event.shiftKey) {
+      // eslint-disable-next-line max-len
+      const element = document.getElementById((event.key === ',' || event.key === '/') || (event.code.includes('Digit') && (event.key === '"' || event.key === ';' || event.key === ':'))
+        ? en[event.key]
+        : event.key.toLowerCase());
+      if (element.parentElement) {
+        element.parentElement.classList.add('pressed');
+      }
       element.classList.add('pressed');
     } else {
-      if (event.shiftKey) {
-        // if (event.key === ',') {
-        const element = document.getElementById((event.key === ',' || event.key === '/')
-          ? en[event.key]
-          : event.key.toLowerCase());
-        console.log(en[event.key]);
-        if (element.parentElement) {
-          element
-            .parentElement
-            .classList
-            .add('pressed');
-        }
-        element.classList.add('pressed');
-        // }
-      } else {
-        if (document.getElementById(event.key.toLowerCase()).parentElement) {
-          document.getElementById(event.key.toLowerCase())
-            .parentElement
-            .classList
-            .add('pressed');
-        }
-        document.getElementById(event.key.toLowerCase())
-          .classList
-          .add('pressed');
+      // if element is a symbol (e.g. , . / [ ] ) add animation to its parent element
+      if (document.getElementById(event.key.toLowerCase()).parentElement) {
+        document.getElementById(event.key.toLowerCase()).parentElement.classList.add('pressed');
       }
+      document.getElementById(event.key.toLowerCase()).classList.add('pressed');
     }
     textArea.blur();
     if (event.key === ' ') {
@@ -173,11 +156,11 @@ document.addEventListener('keydown', async (event) => {
     } else if (event.key.charCodeAt(0) <= 128) {
       if (localStorage.getItem('lang') === 'ru') {
         if (event.shiftKey) {
-          // textArea.value += (ru[event.key] || ru[event.key.toLowerCase()]).toUpperCase();
-          if (event.code.includes('Digit')) {
-            textArea.value += event.key.toLowerCase();
+          // eslint-disable-next-line max-len
+          if (event.shiftKey && ((event.key === ',' || event.key === '/') || (event.code.includes('Digit') && (event.key === '"' || event.key === ';' || event.key === ':')))) {
+            textArea.value += event.key;
           } else {
-            textArea.value += ru[event.key.toLowerCase()].toUpperCase();
+            textArea.value += ru[event.key.toLowerCase()] ? ru[event.key.toLowerCase()] : event.key;
           }
         } else {
           textArea.value += ru[event.key.toLowerCase()] ? ru[event.key.toLowerCase()] : event.key;
@@ -189,11 +172,7 @@ document.addEventListener('keydown', async (event) => {
       }
     } else if (localStorage.getItem('lang') === 'en') {
       if (event.shiftKey) {
-        // console.log(event.key.toLowerCase());
-        // console.log(en[event.key.toLowerCase()]);
-        // textArea.value += en[event.key.toLowerCase()].toUpperCase();
         textArea.value += (en[event.key] || en[event.key.toLowerCase()]).toUpperCase();
-        console.log(en[event.key]);
       } else {
         textArea.value += en[event.key.toLowerCase()];
       }
@@ -202,9 +181,7 @@ document.addEventListener('keydown', async (event) => {
     }
     if (event.key === 'Tab') {
       await sleep(300);
-      document.getElementById(event.key.toLowerCase())
-        .classList
-        .remove('pressed');
+      document.getElementById(event.key.toLowerCase()).classList.remove('pressed');
     }
   }
 });
@@ -213,12 +190,8 @@ document.addEventListener('keyup', async (event) => {
   await sleep(100);
   if (event.location !== 0) {
     if (event.key === 'Meta') {
-      document.getElementById('leftShift')
-        .classList
-        .remove('pressed');
-      document.getElementById('leftAlt')
-        .classList
-        .remove('pressed');
+      document.getElementById('leftShift').classList.remove('pressed');
+      document.getElementById('leftAlt').classList.remove('pressed');
     } else if (event.key === 'Shift') {
       const letters = document.getElementsByClassName('letter');
       [].forEach.call(letters, (element) => {
@@ -245,17 +218,15 @@ document.addEventListener('keyup', async (event) => {
         }
       });
       document.getElementById(`${event.location === 1 ? 'left' : 'right'}${event.key}`)
-        .classList
-        .remove('pressed');
+        .classList.remove('pressed');
     } else {
       document.getElementById(`${event.location === 1 ? 'left' : 'right'}${event.key}`)
-        .classList
-        .remove('pressed');
+        .classList.remove('pressed');
     }
   } else {
-    if (event.shiftKey && event.key === ',') {
-      const element = document.getElementById(en[event.key]);
-      console.log(en[event.key]);
+    // eslint-disable-next-line max-len
+    if (event.shiftKey && ((event.key === ',' || event.key === '/') || (event.code.includes('Digit') && (event.key === '"' || event.key === ';' || event.key === '?')))) {
+      const element = document.getElementById(event.key);
       if (element.parentElement) {
         element.parentElement.classList.remove('pressed');
       }
@@ -269,13 +240,27 @@ document.addEventListener('keyup', async (event) => {
       element.parentElement.classList.remove('pressed');
     }
     element.classList.remove('pressed');
+    if (en[event.key]) {
+      document.getElementById(en[event.key]).parentElement.classList.remove('pressed');
+    }
   }
 });
 
 document.getElementById('keyboard')
   .addEventListener('click', async (event) => {
     if (!event.target.className.includes('row') && event.target.className !== '') {
-      textArea.value += event.target.textContent;
+      if (event.target.className === 'capslock') {
+        // Looping through each letter and making its text either upperCase or lowerCase
+        const array = document.getElementsByClassName('letter');
+        [].forEach.call(array, (element) => {
+          const elem = element;
+          elem.innerHTML = elem.textContent === elem.textContent.toUpperCase()
+            ? elem.textContent.toLowerCase()
+            : elem.textContent.toUpperCase();
+        });
+      } else {
+        textArea.value += (event.target.querySelector('.off') || event.target).textContent;
+      }
       event.target.classList.add('pressed');
       await sleep(300);
       event.target.classList.remove('pressed');
